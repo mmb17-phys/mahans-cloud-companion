@@ -1,0 +1,41 @@
+// MAHAN OS API Worker configuration.
+// Replace every REPLACE_ME value with resources YOU create (see README.md → "Cloudflare setup").
+// No IDs or credentials here are real; nothing has been provisioned for you.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mahan-os-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+
+  // Serve the API on the same origin as the app so session cookies stay first-party
+  // (SameSite=Strict). Example: app at https://os.example.com, API on /api/*.
+  "routes": [{ "pattern": "os.example.com/api/*", "zone_name": "example.com" }],
+
+  "vars": {
+    "APP_ORIGIN": "https://os.example.com",
+    "R2_BUCKET_NAME": "mahan-os-files",
+    "SESSION_TTL_HOURS": "168"
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mahan-os",
+      "database_id": "REPLACE_ME_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  // Private bucket: never enable public access or an r2.dev subdomain.
+  "r2_buckets": [{ "binding": "FILES", "bucket_name": "mahan-os-files" }]
+
+  // Secrets (set with `wrangler secret put NAME`, never committed):
+  //   SESSION_SECRET        – 32+ random bytes, signs short-lived media/stream tokens
+  //   SETUP_TOKEN           – one-time token required to create the single owner account
+  //   R2_ACCOUNT_ID         – Cloudflare account id (for presigned R2 S3 URLs)
+  //   R2_ACCESS_KEY_ID      – R2 API token access key (Object Read & Write, this bucket only)
+  //   R2_SECRET_ACCESS_KEY  – R2 API token secret
+  //   <REF>_ACCESS_KEY_ID / <REF>_SECRET_ACCESS_KEY – per S3-compatible connection
+}

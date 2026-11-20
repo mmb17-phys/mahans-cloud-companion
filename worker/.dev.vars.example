@@ -1,0 +1,10 @@
+# Copy to worker/.dev.vars for `wrangler dev` (never commit .dev.vars).
+SESSION_SECRET=replace-with-64-hex-chars-from-openssl-rand-hex-32
+SETUP_TOKEN=replace-with-a-long-random-one-time-token
+APP_ORIGIN=http://localhost:8080
+R2_ACCOUNT_ID=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+# Example S3-compatible connection with secretRef "S3_BACKUP":
+# S3_BACKUP_ACCESS_KEY_ID=
+# S3_BACKUP_SECRET_ACCESS_KEY=
